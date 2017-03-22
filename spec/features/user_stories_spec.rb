@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe "User Stories" do
   let (:entry_station) {double(:entry_station)}
-  let (:exit_station) {double(:exit_station)}
+
 
   # In order to use public transport
   # As a customer
@@ -42,7 +42,7 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in
+    card.touch_in(:entry_station)
     card.touch_out
     expect(card.balance).to eq amount_topped_up - Oystercard::MIN_FARE
   end
@@ -61,7 +61,7 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in
+    card.touch_in(:entry_station)
     expect(card.in_journey?).to eq true
   end
 
@@ -69,7 +69,7 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in
+    card.touch_in(:entry_station)
     card.touch_out
     expect(card.in_journey?).to eq false
   end
@@ -77,7 +77,7 @@ describe "User Stories" do
   it "so that the card ensures user has minimum balance for journey" do
     card = Oystercard.new
     min_balance = Oystercard::MIN_BALANCE
-    expect{card.touch_in}.to raise_error "Cannot start journey. Minimum balance required is £#{min_balance}. Top up."
+    expect{card.touch_in(:entry_station)}.to raise_error "Cannot start journey. Minimum balance required is £#{min_balance}. Top up."
   end
 
   #  In order to pay for my journey
@@ -88,7 +88,7 @@ describe "User Stories" do
     amount_topped_up = 10
     card.top_up(amount_topped_up)
     min_fare = Oystercard::MIN_FARE
-    card.touch_in
+    card.touch_in(:entry_station)
     expect { card.touch_out }.to change { card.balance }.by -min_fare
   end
 
@@ -96,12 +96,25 @@ describe "User Stories" do
   # As a customer
   # I need to know where I've travelled from
 
-
+  it "should remember the entry station after touch in" do
+    card = Oystercard.new
+    amount_topped_up = 10
+    card.top_up(amount_topped_up)
+    card.touch_in(:entry_station)
+    expect(card.entry_station).to eq :entry_station
+  end
 
   # As TLF
   # I want the oystercard to remove its stored station on touch out
   # so that its ready for the next journey
-
+  it "should forget the entry station after touch out" do
+    card = Oystercard.new
+    amount_topped_up = 10
+    card.top_up(amount_topped_up)
+    card.touch_in(:entry_station)
+    card.touch_out
+    expect(card.entry_station).to be_nil
+  end
 
     # In order to know where I have been
     # As a customer
