@@ -7,6 +7,9 @@ describe Oystercard do
     it 'has a balance of 0' do
       expect(oystercard.balance).to eq 0
     end
+    it 'should initialize with an empty list of journeys' do
+      expect(oystercard.journeys).to eq []
+    end
   end
 
   describe "#top_up" do
@@ -48,14 +51,14 @@ end
     before do
       oystercard.top_up(10)
       oystercard.touch_in(:entry_station)
-      oystercard.touch_out
+      oystercard.touch_out(:exit_station)
     end
     it 'can touch out' do
       expect(oystercard).not_to be_in_journey
     end
 
     it 'deducts minimum fare' do
-      expect {oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
+      expect {oystercard.touch_out(:exit_station)}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
     end
     it 'should forget entry station' do
       expect(oystercard.entry_station).to be_nil

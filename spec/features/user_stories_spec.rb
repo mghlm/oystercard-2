@@ -2,7 +2,8 @@ require 'oystercard'
 
 describe "User Stories" do
   let (:entry_station) {double(:entry_station)}
-
+  let (:exit_station) {double(:exit_station)}
+  let (:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
   # In order to use public transport
   # As a customer
@@ -42,8 +43,8 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in(:entry_station)
-    card.touch_out
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
     expect(card.balance).to eq amount_topped_up - Oystercard::MIN_FARE
   end
 
@@ -61,7 +62,7 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in(:entry_station)
+    card.touch_in(entry_station)
     expect(card.in_journey?).to eq true
   end
 
@@ -69,15 +70,15 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in(:entry_station)
-    card.touch_out
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
     expect(card.in_journey?).to eq false
   end
 
   it "so that the card ensures user has minimum balance for journey" do
     card = Oystercard.new
     min_balance = Oystercard::MIN_BALANCE
-    expect{card.touch_in(:entry_station)}.to raise_error "Cannot start journey. Minimum balance required is £#{min_balance}. Top up."
+    expect{card.touch_in(entry_station)}.to raise_error "Cannot start journey. Minimum balance required is £#{min_balance}. Top up."
   end
 
   #  In order to pay for my journey
@@ -88,8 +89,8 @@ describe "User Stories" do
     amount_topped_up = 10
     card.top_up(amount_topped_up)
     min_fare = Oystercard::MIN_FARE
-    card.touch_in(:entry_station)
-    expect { card.touch_out }.to change { card.balance }.by -min_fare
+    card.touch_in(entry_station)
+    expect { card.touch_out(exit_station) }.to change { card.balance }.by -min_fare
   end
 
   # In order to pay for my journey
@@ -100,8 +101,8 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in(:entry_station)
-    expect(card.entry_station).to eq :entry_station
+    card.touch_in(entry_station)
+    expect(card.entry_station).to eq entry_station
   end
 
   # As TLF
@@ -111,15 +112,33 @@ describe "User Stories" do
     card = Oystercard.new
     amount_topped_up = 10
     card.top_up(amount_topped_up)
-    card.touch_in(:entry_station)
-    card.touch_out
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
     expect(card.entry_station).to be_nil
   end
 
     # In order to know where I have been
     # As a customer
     # I want to see to all my previous trips
+context "Complete journey is executed" do
+  it 'so journey can be correctly logged, card registers the exit station' do
+    card = Oystercard.new
+    amount_topped_up = 10
+    card.top_up(amount_topped_up)
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
+    expect(card.exit_station).to eq exit_station
+  end
 
+  it "so customer can reference journey history, card stores journeys" do
+    card = Oystercard.new
+    amount_topped_up = 10
+    card.top_up(amount_topped_up)
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
+    expect(card.journeys).to include journey
+  end
+end
 
 
 
