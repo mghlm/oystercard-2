@@ -19,6 +19,8 @@ class Oystercard
   def touch_in(entry_station)
     fail "Cannot start journey. Minimum balance required is £#{MIN_BALANCE}. Top up." if low_balance?
     self.entry_station = entry_station
+    # @journey = Journey.new
+    # journey.start(entry_station)
   end
 
   def touch_out(exit_station)
