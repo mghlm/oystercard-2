@@ -136,7 +136,7 @@ context "Complete journey is executed" do
     card.top_up(amount_topped_up)
     card.touch_in(entry_station)
     card.touch_out(exit_station)
-    expect(card.journeys).to include journey
+    expect(card.journeys).to include card.journey
   end
 end
 
