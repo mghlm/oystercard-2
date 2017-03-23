@@ -37,6 +37,12 @@ describe Oystercard do
       expect(oystercard.entry_station).to be :entry_station
     end
 
+    it 'passes entry station to journey' do
+      oystercard.top_up(5)
+      oystercard.touch_in(:entry_station)
+      expect(oystercard.journey.entry_station).to eq :entry_station 
+    end
+
     it 'checks minimum balance on touch in' do
       message = "Cannot start journey. Minimum balance required is £#{Oystercard::MIN_BALANCE}. Top up."
       expect{ oystercard.touch_in(:entry_station) }.to raise_error message

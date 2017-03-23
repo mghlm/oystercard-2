@@ -1,6 +1,6 @@
+require_relative 'journey'
 class Oystercard
-
-  attr_reader :balance, :entry_station, :exit_station, :journeys
+  attr_reader :balance, :entry_station, :exit_station, :journeys, :journey
 
   MAX_BALANCE = 90
   MIN_BALANCE = 1
@@ -9,6 +9,7 @@ class Oystercard
   def initialize
     @balance = 0
     @journeys = []
+    @journey = Journey.new
   end
 
   def top_up(amount)
@@ -19,8 +20,7 @@ class Oystercard
   def touch_in(entry_station)
     fail "Cannot start journey. Minimum balance required is £#{MIN_BALANCE}. Top up." if low_balance?
     self.entry_station = entry_station
-    # @journey = Journey.new
-    # journey.start(entry_station)
+    journey.start(entry_station)
   end
 
   def touch_out(exit_station)
@@ -36,7 +36,7 @@ class Oystercard
 
   private
 
-  attr_writer :balance, :entry_station, :exit_station
+  attr_writer :balance, :entry_station, :exit_station, :journey
 
   def invalid_top_up?(amount)
     amount + balance > MAX_BALANCE
