@@ -7,12 +7,6 @@ describe Journey do
 
 describe "#initialize" do
   it 'starts a journey' do
-    expect(journey.current_trip).to eq ({})
-  end
-end
-
-describe "#start" do
-  it "records entry station" do
     expect(journey.entry_station).to eq nil
   end
 end

@@ -1,14 +1,9 @@
 class Journey
 
-  attr_reader :current_trip, :entry_station
+  attr_reader :entry_station, :exit_station
 
-  def initialize(entry_station = "Aldgate")
-    @current_trip = {}
+  def initialize(entry_station = nil)
     @entry_station = entry_station
-  end
-
-  def start(entry_station)
-    entry_station
   end
 
   def end(exit_station)
