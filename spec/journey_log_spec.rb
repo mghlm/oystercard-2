@@ -30,13 +30,17 @@ describe JourneyLog do
     # end
 
     it "should set exit station" do
-      journey_log.end([fake_station])
-      expect(journey_log.journey_history).to include fake_station
+      journey_log.end(fake_new_journey)
+      expect(journey_log.journey_history.first.exit_station).to eq fake_new_journey
     end
 
-    it "should add journey to journey history after #end" do
-      journey_log.end(exit_station)
-      expect(journey_log.journey_history).to include exit_station
+    it 'should create a new instance of journey when #end called' do
+      expect(journey_log.end(exit_station)).to eq journey_log.journey_class
     end
+
+    # it "should add journey to journey history after #end" do
+    #   journey_log.end(exit_station)
+    #   expect(journey_log.journey_history).to include exit_station
+    # end
   end
 end

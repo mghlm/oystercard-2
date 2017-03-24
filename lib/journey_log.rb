@@ -16,7 +16,7 @@ class JourneyLog
   def end(exit_station)
     journey_class.end(exit_station)
     add(journey_class)
-  #   self.journey_class = Journey.new
+    @journey_class = Journey.new
   end
 
   def add(journey)
