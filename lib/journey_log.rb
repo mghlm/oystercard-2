@@ -10,9 +10,12 @@ class JourneyLog
   end
 
   def start(entry_station)
-    # journey.start(entry_station)
+    journey_class.start(entry_station)
   end
 
+  def add(journey)
+    journey_history << journey
+  end
   # def end(exit_station)
   #   journey.finish(exit_station)
   #   add journey to journey_history
