@@ -13,14 +13,15 @@ class JourneyLog
     journey_class.start(entry_station)
   end
 
+  def end(exit_station)
+    journey_class.end(exit_station)
+    add(journey_class)
+  #   self.journey_class = Journey.new
+  end
+
   def add(journey)
     journey_history << journey
   end
-  # def end(exit_station)
-  #   journey.finish(exit_station)
-  #   add journey to journey_history
-  #   create new journey instance
-  # end
 
 
 end
