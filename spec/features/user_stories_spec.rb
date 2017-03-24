@@ -130,14 +130,14 @@ context "Complete journey is executed" do
     expect(card.exit_station).to eq exit_station
   end
 
-  it "so customer can reference journey history, card stores journeys" do
-    card = Oystercard.new
-    amount_topped_up = 10
-    card.top_up(amount_topped_up)
-    card.touch_in(entry_station)
-    card.touch_out(exit_station)
-    expect(card.journeys).to include card.journey
-  end
+  # it "so customer can reference journey history, card stores journeys" do
+  #   card = Oystercard.new
+  #   amount_topped_up = 10
+  #   card.top_up(amount_topped_up)
+  #   card.touch_in(entry_station)
+  #   card.touch_out(exit_station)
+  #   expect(card.journeys).to include card.journey
+  # end
 end
 
 

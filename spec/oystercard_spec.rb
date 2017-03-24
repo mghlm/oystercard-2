@@ -54,6 +54,7 @@ describe Oystercard do
 end
 
   describe '#touch_out' do
+
     before do
       oystercard.top_up(10)
       oystercard.touch_in(:entry_station)
@@ -64,17 +65,9 @@ end
       expect(oystercard).not_to be_in_journey
     end
 
-    it 'passes exit station to journey' do
-      expect(oystercard.journey.exit_station).to eq :exit_station
-    end
-
-    it 'deducts minimum fare' do
-      expect {oystercard.touch_out(:exit_station)}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
-    end
-
-    it 'stores the journey in a journeys array' do
-      expect(oystercard.journeys).to include oystercard.journey
-    end
+    # it 'stores the journey in a journeys array' do
+    #   expect(oystercard.journeys).to include journey
+    # end
 
     it 'should forget entry station' do
       expect(oystercard.entry_station).to be_nil
